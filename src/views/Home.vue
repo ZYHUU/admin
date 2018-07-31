@@ -7,7 +7,8 @@
                 default-active="2"
                 :collapse= 'isCollapse'
                 class=" el-menu-admin"
-              
+                @open="handleOpen"
+                @close="handleClose"
                 background-color="#545c64"
                 text-color="#fff"
                 active-text-color="#ffd04b">
@@ -27,11 +28,11 @@
             <el-container>
                 <!-- header部分 -->
                <el-header>
-                   <i class='myicon myicon-menu toggle-btn'></i>
+                   <i class='myicon myicon-menu toggle-btn' @click="toggleCollapse"></i>
                    <dir class="system-title">电商后台管理系统</dir> 
                    <div>
                        <span class="welcome">您好,XXX</span> 
-                       <el-button type="text">退出</el-button> 
+                       <el-button type="text" @click='logout'>退出</el-button> 
                    </div>
                    
                </el-header>
@@ -52,7 +53,21 @@ export default {
         }
     },
     methods: {
-        
+         handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            toggleCollapse(){
+                this.isCollapse = ! this.isCollapse
+            },
+            logout(){
+                // 清除登录状态，清除locaStorage中的token
+                localStorage.removeItem('mytoken')
+                // 跳转到登录页面
+                this.$router.push({name: 'Login'})
+            }
     }
 }
 </script>
@@ -67,6 +82,9 @@ export default {
   }
   .el-container {
     height: 100%;
+  }
+  .el-menu-admin{
+    border-right: 0;
   }
   .el-aside {
     background-color: #545c64;
