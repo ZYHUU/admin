@@ -11,13 +11,14 @@
                 <el-input v-model="form.password" placeholder="密码" prefix-icon="myicon myicon-key"></el-input>
             </el-form-item>  
              <el-form-item prop="password">
-                 <el-button type="primary" class="login-btn" >登录</el-button>
+                 <el-button type="primary" class="login-btn" @click="loginSubmit('form')">登录</el-button>
             </el-form-item>  
            
        </el-form> 
     </div> 
 </template>
 <script>
+import {checkUser}  from '../api/index.js'
 export default{
     data(){
         return{
@@ -33,6 +34,27 @@ export default{
                     { required: true, message: '请输入密码', trigger: 'blur' },
                 ]
             } 
+        }
+    },
+    methods: {
+        loginSubmit(formName){
+            this.$refs[formName].validate((valid) => {           
+                if (valid) {            
+                    checkUser(this.form).then(res => {
+                        if(res.meta.status === 200) {
+                             localStorage.setItem('mytoken',res.data.token)
+                        }else{
+                             this.$message({
+                                message: res.meta.msg,
+                                type: 'error'
+                            });
+                        }
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         }
     }
 }
