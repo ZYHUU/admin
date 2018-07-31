@@ -1,11 +1,28 @@
 ### 基于vue的商城后台管理系统
-###技术栈
-####前端
-- vue.js, vue-router,axios,Element-UI,es6
+### 技术栈
+##### 前端
+- vue
+- vue.router
+- axios
+- Element-UI
+- webpack
+##### 后端
+- node.js
+- express
+- mysql
+### 项目业务分析
+电商业务
+
+- 对外网站（用户购买）
+- 后台管理端（用于运营人员）
+- 移动Web
+- APP
+- 数据分析（用户行为分析）
+- 数据统计系统（财务）
 ### 下载本项目
-`git clone`
+`git clone 'git@github.com:ZYHUU/admin.git'`
 ### 项目依赖
-node.js
+node.js(>= 6.0.0)
 ### 安装
 ##### 1.部署本地服务器(后端) 
 - 找到根目录下的dep文件夹。
