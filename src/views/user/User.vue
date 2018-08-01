@@ -1,14 +1,13 @@
 <template>
-    <div>
-        欢迎登陆
+    <div class="user">
+        user
     </div>
 </template>
 <script>
-export default{
+export default {
 
 }
 </script>
 <style lang="scss" scoped>
 
 </style>
-

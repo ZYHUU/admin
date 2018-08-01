@@ -11,6 +11,8 @@ import 'element-ui/lib/theme-chalk/index.css'
  import "@/styles/element.css"
  import "@/styles/icon.css"
 
+ import store from '@/store/store.js'
+
 Vue.use(ElementUi)
 Vue.config.productionTip = false
 
@@ -31,6 +33,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -4,8 +4,9 @@
              <el-aside width="auto">
                  <div class="logo"></div>  
                  <el-menu
-                default-active="2"
+                default-active="/user"
                 :collapse= 'isCollapse'
+                :router = true
                 class=" el-menu-admin"
                 @open="handleOpen"
                 @close="handleClose"
@@ -17,7 +18,7 @@
                             <i class="el-icon-location"></i>
                             <span>导航一</span>
                         </template>                
-                    <el-menu-item index="2">
+                    <el-menu-item index="/user">
                         <i class="el-icon-menu"></i>
                         <span slot="title">选项一</span>
                     </el-menu-item>
@@ -31,7 +32,7 @@
                    <i class='myicon myicon-menu toggle-btn' @click="toggleCollapse"></i>
                    <dir class="system-title">电商后台管理系统</dir> 
                    <div>
-                       <span class="welcome">您好,XXX</span> 
+                       <span class="welcome">您好,{{$store.state.username}}</span> 
                        <el-button type="text" @click='logout'>退出</el-button> 
                    </div>
                    
