@@ -32,40 +32,55 @@
             width="180">
             </el-table-column>
             <el-table-column
-            prop="modil"
+            prop="mobile"
             label="电话"
             width="180">
             </el-table-column>
             <el-table-column label="用户状态">
-                 
+                  <template slot-scope="scope">
+                    <el-switch v-model="value1" >
+                    </el-switch>
+                </template>
             </el-table-column>
             <el-table-column label="操作">
-                 
+                  <template slot-scope="scope">
+                    <el-button size="mini" type="primary" icon="el-icon-edit" ></el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" ></el-button>
+                    <el-button size="mini" type="success" icon="el-icon-check"></el-button>
+                </template>
             </el-table-column>
       </el-table>
-      <el-row>
-          <el-col :span="24">
-              <el-pagination
-                class="page"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="1"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-              </el-pagination>
-          </el-col>
-      </el-row>
+       <dir class="page">
+           <el-pagination  
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="1"
+            :page-sizes="[1, 2, 3, 4]"
+            :page-size="1"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+            </el-pagination>
+        </dir> 
+              
+       
     </div>
 </template>
 <script>
+import {getUserList} from '@/api'
 export default {
     data() {
       return {
         userList: [],
-        value3: true
+        value3: '',
+        total: 0,
+        pagesize: 4,
+        pagenum: 1,
+        query: '',
+        num:2,
       }
+    },
+    created() {
+        this.initList()
     },
     methods: {
       handleSizeChange(val) {
@@ -73,7 +88,16 @@ export default {
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-      }
+      },
+      // 获取用户列表信息
+      initList(){
+            getUserList({params: {query: this.query, pagenum:this.pagenum , pagesize: this.pagesize}})     
+            .then(res =>{
+                this.userList = res.data.users
+                this.total = res.data.total
+                // this.loading = false
+            })     
+        },
     }
   }
 </script>
