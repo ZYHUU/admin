@@ -45,7 +45,7 @@
             <el-table-column label="操作">
                   <template slot-scope="scope">
                     <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
-                    <el-button size="mini" type="danger" icon="el-icon-delete" ></el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
                     <el-button size="mini" type="success" icon="el-icon-check"></el-button>
                 </template>
             </el-table-column>
@@ -103,7 +103,7 @@
     </div>
 </template>
 <script>
-import {getUserList, changeUserState, addUser, getUserById, editUser} from '@/api'
+import {getUserList, changeUserState, addUser, getUserById, editUser, deleteUser} from '@/api'
 export default {
     data() {
       return {
@@ -247,6 +247,35 @@ export default {
                   })
               }
           })
+      },
+      // 删除用户
+      deleteUser (row) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            deleteUser(row.id).then(res =>{
+                if(res.meta.status === 200){
+                    this.initList()
+                        this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }else{
+                    this.$message({
+                        type: 'waring',
+                        message: res.meta.msg
+                    })
+                }
+            })
+         
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
       }
     }
   }
