@@ -14,7 +14,7 @@
                <el-input placeholder="请输入内容"  class="input-with-select search-input" v-model='query' @keydown.native.enter='initList'>
                    <el-button slot="append" icon="el-icon-search" @click='initList'></el-button>                   
                </el-input>
-               <el-button type="success" plain>添加用户</el-button>
+               <el-button type="success" plain @click="addDialogFormVisible=true">添加用户</el-button>
            </el-col>
        </el-row>
        <el-table
@@ -56,17 +56,36 @@
             @current-change="handleCurrentChange"
             :current-page="1"
             :page-sizes="[1, 2, 3, 4]"
-            :page-size="1"
+            :page-size="4"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
             </el-pagination>
         </dir> 
-              
-       
+        <!-- 添加用户对话框   -->
+       <el-dialog title="添加用户" :visible.sync="addDialogFormVisible">
+        <el-form :model="addForm" :label-width="formLabelWidth" ref="addUserForm" :rules="rules">
+            <el-form-item label="用户名" prop="username" >
+                <el-input v-model="addForm.username" auto-complete="off"></el-input>
+            </el-form-item>
+             <el-form-item label="密码" prop="password">
+                <el-input v-model="addForm.password" auto-complete="off"></el-input>
+            </el-form-item>
+             <el-form-item label="邮箱" prop="email">
+                <el-input v-model="addForm.email" auto-complete="off"></el-input>
+            </el-form-item>
+             <el-form-item label="电话" prop="mobile">
+                <el-input v-model="addForm.mobile" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="addDialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addUserSubmit">确 定</el-button>
+        </div>
+       </el-dialog>
     </div>
 </template>
 <script>
-import {getUserList, changeUserState} from '@/api'
+import {getUserList, changeUserState, addUser} from '@/api'
 export default {
     data() {
       return {
@@ -76,6 +95,29 @@ export default {
         pagenum: 1,
         query: '',
         num:4,
+        addForm: {
+            username: '',
+            password: '',
+            email: '',
+            mobile: ''
+        },
+        formLabelWidth: '80px',
+        addDialogFormVisible: false,
+        rules: {
+            username: [
+                { required: true, message: '请输入用户名', trigger: 'blur' }
+            ],
+            password: [
+                { required: true, message: '请输入密码', trigger: 'blur' }
+            ],
+            email: [
+                { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+            ],
+            mobile: [
+                { required: true, message: '电话不能为空' }
+            ]
+        }
       }
     },
     created() {
@@ -83,12 +125,10 @@ export default {
     },
     methods: {
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
         this.pagesize = val
         this.initList()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.pagenum = val
         this.initList()
       },
@@ -117,6 +157,32 @@ export default {
             }
             
         })
+      },
+      // 添加用户
+      addUserSubmit(){
+          this.$refs.addUserForm.validate((valid) => {
+            if (valid) {
+                addUser(this.addForm).then(res => {
+                    if(res.meta.status === 201){
+                        this.$message({
+                            type: 'success',
+                            message: '添加用户成功'
+                        })
+                        this.initList()
+                        this.addDialogFormVisible = false
+                    }else{
+                        this.$message({
+                            type: 'waring',
+                            message: res.meta.msg
+                        })
+                    }
+                })
+              
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
       }
     }
   }
