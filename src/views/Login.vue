@@ -43,7 +43,8 @@ export default{
                     checkUser(this.form).then(res => {
                         if(res.meta.status === 200) {
                              localStorage.setItem('mytoken', res.data.token)
-                             this.$store.commit('username', res.data.username)                        
+                             this.$store.commit('username', res.data.username) 
+                             console.log(res)                       
                              this.$router.push({name: 'home'})
                         }else{
                              this.$message({

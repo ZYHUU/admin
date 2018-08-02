@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column label="用户状态">
                   <template slot-scope="scope">
-                    <el-switch v-model="value1" >
+                    <el-switch v-model="scope.row.mg_state" @change ='changeUserState(scope.row)'>
                     </el-switch>
                 </template>
             </el-table-column>
@@ -66,12 +66,11 @@
     </div>
 </template>
 <script>
-import {getUserList} from '@/api'
+import {getUserList, changeUserState} from '@/api'
 export default {
     data() {
       return {
         userList: [],
-        value1: '',
         total: 0,
         pagesize: 4,
         pagenum: 1,
@@ -101,7 +100,24 @@ export default {
                 this.total = res.data.total
                 // this.loading = false
             })     
-        },
+      },
+      // 改变用户状态
+      changeUserState(row){
+        changeUserState({uid: row.id, state: row.mg_state}).then(res => {
+            if(res.meta.status === 200){
+                this.$message({
+                    type: 'success',
+                    message: '用户状态修改成功'
+                })
+            }else{
+                this.$message({
+                    type: 'waring',
+                    message: res.meta.msg
+                })
+            }
+            
+        })
+      }
     }
   }
 </script>
