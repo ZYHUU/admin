@@ -44,7 +44,7 @@
             </el-table-column>
             <el-table-column label="操作">
                   <template slot-scope="scope">
-                    <el-button size="mini" type="primary" icon="el-icon-edit" ></el-button>
+                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
                     <el-button size="mini" type="danger" icon="el-icon-delete" ></el-button>
                     <el-button size="mini" type="success" icon="el-icon-check"></el-button>
                 </template>
@@ -82,10 +82,28 @@
             <el-button type="primary" @click="addUserSubmit">确 定</el-button>
         </div>
        </el-dialog>
+       <!-- 编辑用户对话框 -->
+       <el-dialog title="编辑用户" :visible.sync="editDialogFormVisible">
+        <el-form :model="editForm" :label-width="formLabelWidth" ref="editUserForm" :rules="rules" >
+            <el-form-item label="用户名" prop="username" >
+                <el-input v-model="editForm.username" auto-complete="off" :disabled="true"></el-input>
+            </el-form-item>
+             <el-form-item label="邮箱" prop="email">
+                <el-input v-model="editForm.email" auto-complete="off"></el-input>
+            </el-form-item>
+             <el-form-item label="电话" prop="mobile">
+                <el-input v-model="editForm.mobile" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="editDialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editUserSubmit">确 定</el-button>
+        </div>
+       </el-dialog>
     </div>
 </template>
 <script>
-import {getUserList, changeUserState, addUser} from '@/api'
+import {getUserList, changeUserState, addUser, getUserById, editUser} from '@/api'
 export default {
     data() {
       return {
@@ -117,7 +135,14 @@ export default {
             mobile: [
                 { required: true, message: '电话不能为空' }
             ]
-        }
+        },
+        editForm: {
+            username: '',
+            email: '',
+            mobile: '',
+            id: ''
+        },
+        editDialogFormVisible: false,
       }
     },
     created() {
@@ -183,6 +208,45 @@ export default {
                 return false;
             }
         });
+      },
+      // 根据id获取用户信息
+      showEditDialog(row){
+          this.editDialogFormVisible = true
+          getUserById(row.id).then(res => {
+              if(res.meta.status === 200) {
+                  this.editForm.username = res.data.username
+                  this.editForm.email = res.data.email
+                  this.editForm.mobile = res.data.mobile
+                  this.editForm.id = res.data.id
+              }else{
+                  this.$message({
+                      type: 'waring',
+                      message: '获取用户信息失败，请稍后尝试'
+                  })
+              }
+          })
+      },
+      // 编辑用户
+      editUserSubmit(){
+          this.$refs.editUserForm.validate(valide => {
+              if(valide){
+                  editUser(this.editForm).then(res => {
+                      if(res.meta.status === 200){
+                          this.initList()
+                          this.$message({
+                              type: 'success',
+                              message: '编辑成功'
+                          })
+                          this.editDialogFormVisible = false
+                      }else{
+                          this.$message({
+                              type: 'waring',
+                              message: res.meta.msg
+                          })
+                      }
+                  })
+              }
+          })
       }
     }
   }
