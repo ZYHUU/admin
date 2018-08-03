@@ -40,3 +40,7 @@ export const editUser = params => {
 export const deleteUser = params => {
   return axios.delete(`users/${params}`, params).then(res => res.data)
 }
+// 获取角色列表
+export const getRoleList = params => {
+  return axios.get('roles').then(res => res.data)
+}

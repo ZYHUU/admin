@@ -46,7 +46,7 @@
                   <template slot-scope="scope">
                     <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
                     <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
-                    <el-button size="mini" type="success" icon="el-icon-check"></el-button>
+                    <el-button size="mini" type="success" icon="el-icon-check" @click="showGrantDialog(scope.row)"></el-button>
                 </template>
             </el-table-column>
       </el-table>
@@ -100,10 +100,28 @@
             <el-button type="primary" @click="editUserSubmit">确 定</el-button>
         </div>
        </el-dialog>
+       <!-- 分配角色对话框 -->
+        <el-dialog title="分配角色" :visible.sync="grantDialogFormVisible">
+        <el-form :model="grantForm" label-width="120px" >
+            <el-form-item label="当前用户" prop="username" >
+                  <el-tag type="info">{{grantForm.username}}</el-tag>
+            </el-form-item>
+            <el-form-item  label="请选择角色">
+                <el-select v-model='roleId' placeholder="请选择角色">
+                    <el-option v-for= "(role,index) in roleList" :key='index' :value="role.id" :label="role.roleName" >                        
+                    </el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="grantDialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="grantUserSubmit">确 定</el-button>
+        </div>
+       </el-dialog>
     </div>
 </template>
 <script>
-import {getUserList, changeUserState, addUser, getUserById, editUser, deleteUser} from '@/api'
+import {getUserList, changeUserState, addUser, getUserById, editUser, deleteUser, getRoleList} from '@/api'
 export default {
     data() {
       return {
@@ -143,6 +161,10 @@ export default {
             id: ''
         },
         editDialogFormVisible: false,
+        grantForm: {},
+        grantDialogFormVisible: false,
+        roleId: '',
+        roleList: []
       }
     },
     created() {
@@ -276,6 +298,19 @@ export default {
             message: '已取消删除'
           });          
         });
+      },
+      // 显示分配角色对话框
+      showGrantDialog(row){
+        this.grantForm = row
+        this.grantDialogFormVisible = true
+        getRoleList().then(res =>{
+            if(res.meta.status === 200){
+                this.roleList = res.data
+            }
+        })
+      },
+      grantUserSubmit(){
+
       }
     }
   }
