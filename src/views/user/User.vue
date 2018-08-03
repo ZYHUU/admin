@@ -20,6 +20,7 @@
        <el-table
         :data="userList"
         border
+         v-loading='loading'
         style="width: 100%">
             <el-table-column
             prop="username"
@@ -121,10 +122,11 @@
     </div>
 </template>
 <script>
-import {getUserList, changeUserState, addUser, getUserById, editUser, deleteUser, getRoleList} from '@/api'
+import {getUserList, changeUserState, addUser, getUserById, editUser, deleteUser, getRoleList, grantUserRow} from '@/api'
 export default {
     data() {
       return {
+        loading: 'true',
         userList: [],
         total: 0,
         pagesize: 4,
@@ -185,7 +187,7 @@ export default {
             .then(res =>{
                 this.userList = res.data.users
                 this.total = res.data.total
-                // this.loading = false
+                this.loading = false
             })     
       },
       // 改变用户状态
@@ -310,7 +312,29 @@ export default {
         })
       },
       grantUserSubmit(){
-
+          if(!this.roleId){
+            this.$message({
+                type: 'error',
+                message: '角色不能为空'
+            })
+        }else{
+            grantUserRow({id: this.grantForm.id, rid: this.roleId}).then(res => {
+                if(res.meta.status === 200){
+                    this.$message({
+                        type: 'success',
+                        message: '分配角色成功'
+                    })
+                    this.grantDialogFormVisible = false
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.meta.msg
+                    })
+                }
+            })
+            
+        }
+          
       }
     }
   }
