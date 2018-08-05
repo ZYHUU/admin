@@ -24,10 +24,10 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="1"
-            :page-sizes="[100, 200, 300, 400]"
+            :page-sizes="[10, 20, 30, 40]"
             :page-size="pagesize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400">
+            :total='total'>
             </el-pagination>
         </div>
     </div>
@@ -52,7 +52,9 @@ export default {
             dataIndex: 'cat_level',
             width: ''
             }],
-            pagesize: '10',
+            pagesize: 10,
+            pagenum: 1,
+            total: '',
         }
     },
     components: {
@@ -71,16 +73,19 @@ export default {
         },
         // 分页
         handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+            this.pagesize = val
+            this.initList()
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            this.pagenum = val
+            this.initList()
         },
         // 获取产品分类列表
         initList () {
-            getCategories({type: '3'}).then(res => {
+            getCategories({type: '3',pagesize: this.pagesize, pagenum: this.pagenum}).then(res => {
                if (res.meta.status === 200) {
-                   this.dataSource = res.data
+                   this.total = res.data.total
+                   this.dataSource = res.data.result
                }
             })
         }
