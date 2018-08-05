@@ -47,21 +47,21 @@
         <el-dialog title="添加权限" :visible.sync="dialogFormVisible">
             <div class="tree-container">
                 <el-tree :data="rightList" show-checkbox node-key="id" 
-                :default-expand-all=true 
+                :default-expand-all=true ref='tree'
                 :default-checked-keys="selectedRights"
                 :props="defaultProps">
               </el-tree>
             </div> 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="submitGrant">确 定</el-button>
             </div>
         </el-dialog>
       
     </div>
 </template>
 <script>
-import {getRoleList, deleteRight, getRightList} from '@/api'
+import {getRoleList, deleteRight, getRightList, grantRoleRight} from '@/api'
 export default {
     data() {
       return {
@@ -131,6 +131,31 @@ export default {
                                 this.selectedRights.push(third.id)
                             })
                         }
+                    })
+                }
+            })   
+        },
+        // 提交授权
+        submitGrant() {
+            let nodeArr = this.$refs.tree.getCheckedNodes()
+            let rids = []
+            nodeArr.forEach(item => {
+                rids.push(item.id + ',' + item.pid)
+            })
+            let newArr = rids.join(',').split(',');
+            let idArr =[...new Set(newArr)];
+            grantRoleRight(this.currentRole.id, {rids: idArr.join(',')}).then(res => {
+                if (res.meta.status === 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '设置权限成功'
+                    })
+                    this.initList()
+                    this.dialogFormVisible = false
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: res.meta.msg
                     })
                 }
             })
