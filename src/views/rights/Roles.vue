@@ -15,15 +15,15 @@
             <template slot-scope="scope">
                <el-row v-for="firstChildren in scope.row.children" :key="firstChildren.id">
                    <el-col :span='4'>
-                       <el-tag  closable type="success">{{firstChildren.authName}}</el-tag> >
+                       <el-tag  closable @close="deleteRight(scope.row, firstChildren.id)" type="success">{{firstChildren.authName}}</el-tag> >
                     </el-col>
                    <el-col :span='20'>
                        <el-row v-for="secondChildren in firstChildren.children" :key="secondChildren.id">
                            <el-col :span='4'>
-                                <el-tag  closable type="info">{{secondChildren.authName}}</el-tag> >
+                                <el-tag  closable @close="deleteRight(scope.row, secondChildren.id)" type="info">{{secondChildren.authName}}</el-tag> >
                            </el-col>
                            <el-col :span='20'>
-                                <el-tag  v-for="thirdChildren in secondChildren.children" :key="thirdChildren.id"  closable type="warning">{{thirdChildren.authName}}</el-tag>
+                                <el-tag closable @close="deleteRight(scope.row, thirdChildren.id)"  v-for="thirdChildren in secondChildren.children" :key="thirdChildren.id"   type="warning">{{thirdChildren.authName}}</el-tag>
                            </el-col>
                        </el-row>
                    </el-col>
@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import {getRoleList} from '@/api'
+import {getRoleList, deleteRight} from '@/api'
 export default {
     data() {
       return {
@@ -60,11 +60,28 @@ export default {
         // 获取角色列表数据
         initList() {
             getRoleList().then(res => {
-                if(res.meta.status === 200) {
-                    console.log(res)
+                if (res.meta.status === 200) {
                     this.roleList = res.data
                 }
             })
+        },
+        // 删除角色指定权限
+        deleteRight(row, rightId) {
+            deleteRight({roleId: row.id, rightId: rightId}).then(res => {
+               if (res.meta.status === 200) {
+                   this.$message({
+                       type: 'success',
+                       message: res.meta.msg
+                   })
+                   this.initList()
+               } else {
+                   this.$message({
+                       type: 'error',
+                       message: res.meta.msg
+                   })
+               }
+            })
+
         }
     }
   }

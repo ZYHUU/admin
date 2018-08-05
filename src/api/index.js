@@ -56,3 +56,7 @@ export const getRightList = params => {
 export const getMenu = params => {
   return axios.get('menus').then(res => res.data)
 }
+// 删除角色指定权限
+export const deleteRight = params => {
+  return axios.delete(`roles/${params.roleId}/rights/${params.rightId}`).then(res => res.data)
+}
