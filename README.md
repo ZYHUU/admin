@@ -2,10 +2,13 @@
 ### 技术栈
 ##### 前端
 - vue
+- vue-cli
+- webpack
 - vue.router
 - axios
+- vuex
 - Element-UI
-- webpack
+- scss
 ##### 后端
 - node.js
 - express
