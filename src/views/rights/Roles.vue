@@ -48,7 +48,7 @@
             <div class="tree-container">
                 <el-tree :data="rightList" show-checkbox node-key="id" 
                 :default-expand-all=true 
-                :default-checked-keys="[5]"
+                :default-checked-keys="selectedRights"
                 :props="defaultProps">
               </el-tree>
             </div> 
@@ -67,7 +67,9 @@ export default {
       return {
         roleList: [],
         dialogFormVisible: false,
-        rightList: [],
+        rightList: [], 
+        selectedRights: [],// 保存默认选中的
+        currentRole: [], // 保存勾选中的
         defaultProps: {
             children: 'children',
             label: 'authName'
@@ -104,12 +106,33 @@ export default {
             })
 
         },
-        // 显示添加权限弹出框
+        // 显示权限树形框
         showDialog(row) {
             this.dialogFormVisible = true
+            this.currentRole = row
             getRightList({type: 'tree'}).then(res => {
-                this.rightList = res.data
-                console.log(this.rightList)
+                if (res.meta.status === 200) {
+                    this.rightList = res.data
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: res.meta.message
+                    })
+                }
+            });
+            // 遍历之前先清空数组
+            this.selectedRights.length = 0
+            // 取出当前角色权限,遍历到他的第三个children,取出所对应的id放在定义好的配置项中
+            this.currentRole.children.forEach(first => {
+                if(first.children && first.children.length !== 0) {
+                    first.children.forEach(second => {
+                        if(second.children && second.children.length !== 0) {
+                            second.children.forEach(third => {
+                                this.selectedRights.push(third.id)
+                            })
+                        }
+                    })
+                }
             })
             
         }
