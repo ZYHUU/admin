@@ -37,20 +37,41 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
-                    <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
-                    <el-button size="mini" type="success" icon="el-icon-check" @click="showGrantDialog(scope.row)"></el-button>
+                    <el-button size="mini" type="primary" icon="el-icon-edit" ></el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" ></el-button>
+                    <el-button size="mini" type="success" icon="el-icon-check" @click="showDialog(scope.row)"></el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <!-- 添加权限对话框 -->
+        <el-dialog title="添加权限" :visible.sync="dialogFormVisible">
+            <div class="tree-container">
+                <el-tree :data="rightList" show-checkbox node-key="id" 
+                :default-expand-all=true 
+                :default-checked-keys="[5]"
+                :props="defaultProps">
+              </el-tree>
+            </div> 
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+      
     </div>
 </template>
 <script>
-import {getRoleList, deleteRight} from '@/api'
+import {getRoleList, deleteRight, getRightList} from '@/api'
 export default {
     data() {
       return {
         roleList: [],
+        dialogFormVisible: false,
+        rightList: [],
+        defaultProps: {
+            children: 'children',
+            label: 'authName'
+        }
       }
     },
     created() {
@@ -82,6 +103,15 @@ export default {
                }
             })
 
+        },
+        // 显示添加权限弹出框
+        showDialog(row) {
+            this.dialogFormVisible = true
+            getRightList({type: 'tree'}).then(res => {
+                this.rightList = res.data
+                console.log(this.rightList)
+            })
+            
         }
     }
   }
