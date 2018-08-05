@@ -9,7 +9,7 @@
                </el-breadcrumb>
            </el-col>
        </el-row>
-       <el-button type="primary">添加角色</el-button>
+       <el-button type="primary" @click='addNewRoles'>添加角色</el-button>
        <el-table :data="roleList"  style="width: 100%">
             <el-table-column type="expand">
             <template slot-scope="scope">
@@ -43,6 +43,21 @@
                 </template>
             </el-table-column>
         </el-table>
+        <!-- 添加角色对话框 -->
+        <el-dialog title="添加角色" :visible.sync="addRolesDialogFormVisible">
+            <el-form :model="addRolesForm" ref="addFormRoles" :rules='rules' >
+                <el-form-item label="角色名称" prop='roleName'>
+                    <el-input v-model="addRolesForm.roleName" auto-complete="off"></el-input>
+                </el-form-item>
+                 <el-form-item label="角色描述" prop='roleDesc'>
+                    <el-input v-model="addRolesForm.roleDesc" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addRolesDialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addRolesSubmit">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 添加权限对话框 -->
         <el-dialog title="添加权限" :visible.sync="dialogFormVisible">
             <div class="tree-container">
@@ -61,11 +76,21 @@
     </div>
 </template>
 <script>
-import {getRoleList, deleteRight, getRightList, grantRoleRight} from '@/api'
+import {getRoleList, deleteRight, getRightList, grantRoleRight, addRoles} from '@/api'
 export default {
     data() {
       return {
         roleList: [],
+        addRolesDialogFormVisible: false,
+        addRolesForm: {
+            roleName: '',
+            roleDesc: ''
+        },
+        rules: {
+            roleName: [
+            { required: true, message: '请输入角色名称', trigger: 'blur'  }
+          ]
+        },
         dialogFormVisible: false,
         rightList: [], 
         selectedRights: [],// 保存默认选中的
@@ -85,6 +110,34 @@ export default {
             getRoleList().then(res => {
                 if (res.meta.status === 200) {
                     this.roleList = res.data
+                }
+            })
+        },
+        // 显示添加角色对话框
+        addNewRoles() {
+            this.addRolesDialogFormVisible = true
+           
+        },
+        // 确定添加角色
+        addRolesSubmit() {
+             this.$refs.addFormRoles.validate((valid) => {
+                if (valid) {
+                    addRoles({roleName: this.addRolesForm.roleName, roleDesc: this.addRolesForm.roleDesc}).then(res => {
+                        console.log(res)
+                        if (res.meta.status === 201) {
+                            this.$message({
+                                type: 'success',
+                                message: '添加成功'
+                            })
+                            this.addRolesDialogFormVisible = false
+                            this.initList()
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: res.meta.msg
+                            })
+                        }
+                    })
                 }
             })
         },

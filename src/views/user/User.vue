@@ -191,7 +191,8 @@ export default {
       },
       // 添加用户
       addUserSubmit(){
-          this.$refs.addUserForm.validate((valid) => {
+          this.$refs.addUserForm.validate(valid => {
+              console.log(this.$refs.addUserForm)
             if (valid) {
                 addUser(this.addForm).then(res => {
                     if(res.meta.status === 201){

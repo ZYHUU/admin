@@ -64,3 +64,7 @@ export const deleteRight = params => {
 export const grantRoleRight = (roleId, rids) => {
   return axios.post(`roles/${roleId}/rights`, rids).then(res => res.data)
 }
+// 添加角色 
+export const addRoles = params => {
+  return axios.post('roles',params).then(res => res.data)
+}
