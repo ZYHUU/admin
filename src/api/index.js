@@ -48,3 +48,11 @@ export const getRoleList = params => {
 export const grantUserRow = params => {
   return axios.put(`users/${params.id}/role`,{id: params.id,rid: params.rid}).then(res => res.data)
 }
+// 获取权限列表
+export const getRightList = params => {
+  return axios.get(`rights/${params.type}`).then(res => res.data)
+}
+// 左侧菜单权限
+export const getMenu = params => {
+  return axios.get('menus').then(res => res.data)
+}

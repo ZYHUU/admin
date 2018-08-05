@@ -17,48 +17,30 @@
                <el-button type="success" plain @click="addDialogFormVisible=true">添加用户</el-button>
            </el-col>
        </el-row>
-       <el-table
-        :data="userList"
-        border
-         v-loading='loading'
-        style="width: 100%">
-            <el-table-column
-            prop="username"
-            label="姓名"
-            width="180">
-            </el-table-column>
-            <el-table-column
-            prop="email"
-            label="邮箱"
-            width="180">
-            </el-table-column>
-            <el-table-column
-            prop="mobile"
-            label="电话"
-            width="180">
-            </el-table-column>
-            <el-table-column label="用户状态">
-                  <template slot-scope="scope">
-                    <el-switch v-model="scope.row.mg_state" @change ='changeUserState(scope.row)'>
-                    </el-switch>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
-                    <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
-                    <el-button size="mini" type="success" icon="el-icon-check" @click="showGrantDialog(scope.row)"></el-button>
-                </template>
-            </el-table-column>
+       <el-table :data="userList" border v-loading='loading' style="width: 100%">
+        <el-table-column prop="username" label="姓名" width="180">
+        </el-table-column>
+        <el-table-column prop="email" label="邮箱" width="180">
+        </el-table-column>
+        <el-table-column prop="mobile" label="电话" width="180">
+        </el-table-column>
+        <el-table-column label="用户状态">
+                <template slot-scope="scope">
+                <el-switch v-model="scope.row.mg_state" @change ='changeUserState(scope.row)'>
+                </el-switch>
+            </template>
+        </el-table-column>
+        <el-table-column label="操作">
+                <template slot-scope="scope">
+                <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
+                <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row)"></el-button>
+                <el-button size="mini" type="success" icon="el-icon-check" @click="showGrantDialog(scope.row)"></el-button>
+            </template>
+        </el-table-column>
       </el-table>
        <dir class="page">
-           <el-pagination  
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="1"
-            :page-sizes="[1, 2, 3, 4]"
-            :page-size="4"
-            layout="total, sizes, prev, pager, next, jumper"
+           <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
+            :page-sizes="[1, 2, 3, 4]" :page-size="4" layout="total, sizes, prev, pager, next, jumper"
             :total="total">
             </el-pagination>
         </dir> 
