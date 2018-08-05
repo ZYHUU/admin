@@ -6,6 +6,7 @@ import Welcome from '@/views/welcome/Welcome'
 import User from '@/views/user/User'
 import Rights from '@/views/rights/Rights'
 import Roles from '@/views/rights/Roles'
+import Categories from '@/views/category/Categories'
 Vue.use(Router)
 
 export default new Router({
@@ -18,7 +19,8 @@ export default new Router({
         { name: 'welcom', path: 'welcome', component: Welcome },
         { name: 'user', path: 'users', component: User },
         { name: 'rights', path: 'rights', component: Rights },
-        { name: 'roles', path: 'roles', component: Roles }
+        { name: 'roles', path: 'roles', component: Roles },
+        { name: 'categories', path: 'categories', component: Categories}
       ]
     }
   ]

@@ -68,3 +68,7 @@ export const grantRoleRight = (roleId, rids) => {
 export const addRoles = params => {
   return axios.post('roles',params).then(res => res.data)
 }
+// 获取商品列表
+export const getCategories = params => {
+  return axios.get('categories', { params: params }).then(res => res.data)
+}
