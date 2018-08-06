@@ -72,3 +72,7 @@ export const addRoles = params => {
 export const getCategories = params => {
   return axios.get('categories', { params: params }).then(res => res.data)
 }
+// 添加商品分类
+export const addCategories = params => {
+  return axios.post('categories', params).then(res => res.data)
+}
