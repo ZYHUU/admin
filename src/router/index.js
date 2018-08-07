@@ -7,6 +7,7 @@ import User from '@/views/user/User'
 import Rights from '@/views/rights/Rights'
 import Roles from '@/views/rights/Roles'
 import Categories from '@/views/category/Categories'
+import Goods from '@/views/category/Goods'
 Vue.use(Router)
 
 export default new Router({
@@ -20,7 +21,8 @@ export default new Router({
         { name: 'user', path: 'users', component: User },
         { name: 'rights', path: 'rights', component: Rights },
         { name: 'roles', path: 'roles', component: Roles },
-        { name: 'categories', path: 'categories', component: Categories}
+        { name: 'categories', path: 'categories', component: Categories },
+        { name: 'goods', path: 'goods', component: Goods },
       ]
     }
   ]

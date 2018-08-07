@@ -12,7 +12,8 @@
        <el-row>
             <el-button type="success" plain @click="addCategories">添加商品</el-button>
        </el-row>
-       <tree-grid
+       <tree-grid 
+        v-loading='loading'
         :treeStructure="true"
         :columns="columns"
         :data-source="dataSource"
@@ -32,7 +33,7 @@
         </div>
         <!-- 添加分类对话框 -->
         <el-dialog title="添加分类" :visible.sync="addDialogFormVisible" class="addForm">
-            <el-form :model='addForm' :rules='rules' ref='addFormName'>
+            <el-form :model='addForm' :rules='rules' ref='addFormName' v-loading='loading'>
                 <el-form-item label="分类名称" prop="cat_name" >
                     <el-input v-model="addForm.cat_name" auto-complete="off" class="input"></el-input>
                 </el-form-item>
@@ -60,6 +61,7 @@ export default {
     data () {
         return {
             dataSource: [],
+            loading: true,
             columns: [{
                 text: '分类名称',
                 dataIndex: 'cat_name',
@@ -124,6 +126,7 @@ export default {
                if (res.meta.status === 200) {
                    this.total = res.data.total
                    this.dataSource = res.data.result
+                   this.loading = false
                }
             })
         },
@@ -133,6 +136,7 @@ export default {
             getCategories({type: 2}).then(res => {
                 if (res.meta.status === 200) {
                     this.options = res.data
+                    this.loading = false
                 }
             })
         },

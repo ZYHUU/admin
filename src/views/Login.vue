@@ -11,7 +11,7 @@
                 <el-input v-model="form.password" placeholder="密码" prefix-icon="myicon myicon-key" @keydown.native.enter="loginSubmit('form')"></el-input>
             </el-form-item>  
              <el-form-item prop="password">
-                 <el-button type="primary" class="login-btn" @click="loginSubmit('form')">登录</el-button>
+                 <el-button type="primary" class="login-btn" @click="loginSubmit('form')" @keydown.native.enter="loginSubmit('form')">登录</el-button>
             </el-form-item>  
            
        </el-form> 

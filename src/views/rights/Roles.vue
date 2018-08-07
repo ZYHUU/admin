@@ -10,7 +10,7 @@
            </el-col>
        </el-row>
        <el-button type="primary" @click='addNewRoles'>添加角色</el-button>
-       <el-table :data="roleList"  style="width: 100%">
+       <el-table :data="roleList"  style="width: 100%" v-loading='loading'>
             <el-table-column type="expand">
             <template slot-scope="scope">
                <el-row v-for="firstChildren in scope.row.children" :key="firstChildren.id">
@@ -80,6 +80,7 @@ import {getRoleList, deleteRight, getRightList, grantRoleRight, addRoles} from '
 export default {
     data() {
       return {
+        loading: true,
         roleList: [],
         addRolesDialogFormVisible: false,
         addRolesForm: {
@@ -110,6 +111,7 @@ export default {
             getRoleList().then(res => {
                 if (res.meta.status === 200) {
                     this.roleList = res.data
+                    this.loading = false
                 }
             })
         },
