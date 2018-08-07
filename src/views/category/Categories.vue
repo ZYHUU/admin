@@ -10,7 +10,7 @@
            </el-col>
        </el-row>
        <el-row>
-            <el-button type="success" plain @click="addCategories">添加商品</el-button>
+            <el-button type="success" plain @click="addCategories">添加分类</el-button>
        </el-row>
        <tree-grid 
         v-loading='loading'
@@ -56,7 +56,7 @@
 </template>
 <script>
 import TreeGrid from '@/components/TreeGrid/TreeGrid'
-import {getCategories, addCategories} from '@/api'
+import {getCategories, addCategories, deleteCategoried} from '@/api'
 export default {
     data () {
         return {
@@ -104,9 +104,32 @@ export default {
         this.initList()
     },
     methods: {
-        // TreeGrid
+        // TreeGrid 删除分类
         deleteCategory (cid) {
             console.log(cid)
+            this.$confirm('是否删除该分类？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+                deleteCategoried({id: cid}).then(res => {
+                    if (res.meta.status === 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.initList()
+                }
+                
+             })    
+               
+           }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });          
+           });
+            
         },
         editCategory (cid) {
             console.log(cid)

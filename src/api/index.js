@@ -76,3 +76,7 @@ export const getCategories = params => {
 export const addCategories = params => {
   return axios.post('categories', params).then(res => res.data)
 }
+// 删除商品分类
+export const deleteCategoried = params => {
+  return axios.delete(`categories/${params.id}`).then(res => res.data)
+}
