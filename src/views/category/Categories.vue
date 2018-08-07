@@ -34,8 +34,8 @@
         <!-- 添加分类对话框 -->
         <el-dialog title="添加分类" :visible.sync="addDialogFormVisible" class="addForm">
             <el-form :model='addForm' :rules='rules' ref='addFormName' v-loading='loading'>
-                <el-form-item label="分类名称" prop="cat_name" >
-                    <el-input v-model="addForm.cat_name" auto-complete="off" class="input"></el-input>
+                <el-form-item label="分类名称" prop="cat_addname" >
+                    <el-input v-model="addForm.cat_addname" auto-complete="off" class="input"></el-input>
                 </el-form-item>
                 <el-form-item label="父级名称" >
                     <el-cascader                       
@@ -52,11 +52,23 @@
                 <el-button type="primary" @click="addCategorySubmit">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 编辑分类对话框 -->
+        <el-dialog title="修改分类" :visible.sync="editDialogFormVisible">
+            <el-form :model="editForm" :rules='rules' ref="editFormDom">
+                <el-form-item label="分类名称" prop="cat_name">
+                    <el-input v-model="editForm.cat_name" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="editDialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editCategorySubmit">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
 import TreeGrid from '@/components/TreeGrid/TreeGrid'
-import {getCategories, addCategories, deleteCategoried} from '@/api'
+import {getCategories, addCategories, deleteCategoried, getCategoriesId, editCategories} from '@/api'
 export default {
     data () {
         return {
@@ -91,10 +103,17 @@ export default {
                 label: 'cat_name'
             },
             rules: {
-                cat_name: [
+                cat_addname: [
                     { required: true, message: '请输入分类名称', trigger: 'blur' }
+                ],
+                cat_name: [
+                    { required: true, message: '请输入分类名称1', trigger: 'blur' }
                 ]
-            },
+            },         
+            editDialogFormVisible: false,
+            editForm: {
+                cat_name: '',
+            }
         }
     },
     components: {
@@ -104,7 +123,7 @@ export default {
         this.initList()
     },
     methods: {
-        // TreeGrid 删除分类
+        // TreeGrid 删除商品分类
         deleteCategory (cid) {
             console.log(cid)
             this.$confirm('是否删除该分类？', '提示', {
@@ -131,8 +150,37 @@ export default {
            });
             
         },
+        // TreeGrid 修改商品分类
         editCategory (cid) {
-            console.log(cid)
+            this.editDialogFormVisible = true
+            getCategoriesId({id: cid}).then(res => {
+                if (res.data.meta.status === 200) {
+                    this.editForm.cat_name = res.data.data.cat_name
+                    this.editForm.id = res.data.data.cat_id
+                }                
+            })
+        },
+        editCategorySubmit () {
+            this.$refs.editFormDom.validate(valide => {
+                if (valide) {
+                    editCategories(this.editForm).then(res => {
+                        if (res.meta.status === 200) {                       
+                        this.$message({
+                            type: 'success',
+                            message: res.meta.msg
+                        })
+                        this.editDialogFormVisible = false
+                        this.initList()
+                        this.editForm.cat_name = ''
+                      } else {
+                          this.$message({
+                              type: 'error',
+                              message: res.meta.msg
+                          })
+                       }
+                    })
+                }
+            })
         },
         // 分页
         handleSizeChange(val) {
@@ -186,7 +234,7 @@ export default {
                             message: res.meta.msg
                         })
                         this.selectedOptions.length = 0
-                        this.addForm.cat_name = ''
+                        this.addForm.cat_addname = ''
                       } else {
                           this.$message({
                               type: 'error',

@@ -80,3 +80,11 @@ export const addCategories = params => {
 export const deleteCategoried = params => {
   return axios.delete(`categories/${params.id}`).then(res => res.data)
 }
+// 根据id查询商品列表
+export const getCategoriesId = params => {
+  return axios.get(`categories/${params.id}`)
+}
+// 编辑提交商品分类
+export const editCategories = params => {
+  return axios.put(`categories/${params.id}`, params).then(res => res.data)
+}
