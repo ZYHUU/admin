@@ -88,3 +88,7 @@ export const getCategoriesId = params => {
 export const editCategories = params => {
   return axios.put(`categories/${params.id}`, params).then(res => res.data)
 }
+// 订单数据列表
+export const getOrders = params => {
+  return axios.get('orders', params).then(res => res.data)
+}

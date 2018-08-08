@@ -37,8 +37,8 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" icon="el-icon-edit" ></el-button>
-                    <el-button size="mini" type="danger" icon="el-icon-delete" ></el-button>
+                    <el-button size="mini" type="primary" icon="el-icon-edit" disabled></el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" disabled></el-button>
                     <el-button size="mini" type="success" icon="el-icon-check" @click="showDialog(scope.row)"></el-button>
                 </template>
             </el-table-column>
