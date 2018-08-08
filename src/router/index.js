@@ -14,8 +14,7 @@ export default new Router({
   routes: [
     {name: 'Login', path: '/login', component: Login },
     {
-      name: 'home', path: '/', component: Home,
-      redirect: {path: 'welcome' },
+      name: 'home', path: '/', component: Home,     
       children: [
         { name: 'welcom', path: 'welcome', component: Welcome },
         { name: 'user', path: 'users', component: User },
@@ -23,7 +22,8 @@ export default new Router({
         { name: 'roles', path: 'roles', component: Roles },
         { name: 'categories', path: 'categories', component: Categories },
         { name: 'goods', path: 'goods', component: Goods },
-      ]
+      ],
+      redirect: {path: 'welcome' },
     }
   ]
 })

@@ -4,8 +4,8 @@
            <el-col :span='24'>
                <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item><a href="/user">商品管理</a></el-breadcrumb-item>
-                <el-breadcrumb-item>商品分类</el-breadcrumb-item>               
+                <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+                <el-breadcrumb-item ><span class="currentpage">商品分类</span></el-breadcrumb-item>               
                </el-breadcrumb>
            </el-col>
        </el-row>
@@ -160,6 +160,7 @@ export default {
                 }                
             })
         },
+        // 修改商品分类提交
         editCategorySubmit () {
             this.$refs.editFormDom.validate(valide => {
                 if (valide) {

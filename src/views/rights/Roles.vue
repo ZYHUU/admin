@@ -5,7 +5,7 @@
                <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item><a href="/user">权限管理</a></el-breadcrumb-item>
-                <el-breadcrumb-item>角色列表</el-breadcrumb-item>               
+                <el-breadcrumb-item><span class="currentpage">角色列表</span></el-breadcrumb-item>               
                </el-breadcrumb>
            </el-col>
        </el-row>

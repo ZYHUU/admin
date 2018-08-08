@@ -5,7 +5,7 @@
                <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item><a href="/user">用户管理</a></el-breadcrumb-item>
-                <el-breadcrumb-item>用户列表</el-breadcrumb-item>               
+                <el-breadcrumb-item><span class="currentpage">用户列表</span></el-breadcrumb-item>               
                </el-breadcrumb>
            </el-col>
        </el-row>
@@ -211,7 +211,6 @@ export default {
                 })
               
             } else {
-                console.log('error submit!!');
                 return false;
             }
         });
